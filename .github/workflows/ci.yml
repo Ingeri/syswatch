@@ -23,7 +23,7 @@ jobs:
       - name: Run ShellCheck Static Analysis
         run: |
           echo "Running ShellCheck on bin, lib, and installer..."
-          shellcheck bin/syswatch lib/*.sh install.sh
+          shellcheck -x bin/syswatch lib/*.sh install.sh
 
       - name: Verify Bash Syntax
         run: |
@@ -36,7 +36,6 @@ jobs:
       - name: Test Local Sourcing Path
         run: |
           echo "Verifying script execution permissions and structure..."
-          # Quick sanity test ensuring files are present and executable
           test -f config/syswatch.conf
           test -f install.sh
           echo "All structural checks passed successfully!"
