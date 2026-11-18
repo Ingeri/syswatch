@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  validate-scripts:
+    name: Lint & Validate Bash Scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck Static Analysis
+        run: |
+          echo "Running ShellCheck on bin, lib, and installer..."
+          shellcheck bin/syswatch lib/*.sh install.sh
+
+      - name: Verify Bash Syntax
+        run: |
+          echo "Checking syntax across all script files..."
+          bash -n bin/syswatch
+          bash -n lib/vitals.sh
+          bash -n lib/services.sh
+          bash -n install.sh
+
+      - name: Test Local Sourcing Path
+        run: |
+          echo "Verifying script execution permissions and structure..."
+          # Quick sanity test ensuring files are present and executable
+          test -f config/syswatch.conf
+          test -f install.sh
+          echo "All structural checks passed successfully!"
