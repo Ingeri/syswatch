@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Determine script installation directory (or fallback to local dev path)
-# This ensures it finds lib/ and config/ whether run locally or from /usr/local/bin
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Source configuration and modules
-# If installed globally to /usr/local, look in /etc/syswatch or fallback
+# shellcheck source=config/syswatch.conf
+# shellcheck source=lib/vitals.sh
+# shellcheck source=lib/services.sh
 if [[ -f "$SCRIPT_DIR/config/syswatch.conf" ]]; then
   source "$SCRIPT_DIR/config/syswatch.conf"
   source "$SCRIPT_DIR/lib/vitals.sh"
   source "$SCRIPT_DIR/lib/services.sh"
 else
-  # Fallback for global system installation paths
   source "/etc/syswatch/syswatch.conf"
   source "/usr/lib/syswatch/vitals.sh"
   source "/usr/lib/syswatch/services.sh"
@@ -31,6 +29,7 @@ print_header() {
   echo -e "${CYAN}${BOLD}==================================================${NC}"
   echo -e "${CYAN}${BOLD}           SYSWATCH — System Health CLI           ${NC}"
   echo -e "${CYAN}${BOLD}==================================================${NC}"
+  # shellcheck disable=SC2002
   echo -e " Host: $(hostname) | OS: $(grep -oP '(?<=PRETTY_NAME=")[^"]*' /etc/os-release 2>/dev/null || uname -r)"
   echo -e " Time: $(date '+%Y-%m-%d %H:%M:%S')"
   echo -e "${CYAN}--------------------------------------------------${NC}"
@@ -54,7 +53,6 @@ main() {
   echo -e "\n${CYAN}${BOLD}==================================================${NC}"
 }
 
-# CLI Argument Handling
 case "${1:-}" in
   -w|--watch)
     while true; do

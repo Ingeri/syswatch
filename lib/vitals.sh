@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154
 
 check_cpu() {
   echo -e "\n${CYAN}${BOLD}[ CPU & Load Average ]${NC}"
