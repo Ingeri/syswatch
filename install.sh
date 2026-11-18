@@ -15,4 +15,4 @@ sudo cp config/syswatch.conf /etc/syswatch/syswatch.conf
 # Make executable
 sudo chmod +x /usr/local/bin/syswatch
 
-echo "Installation complete! Run 'syswatch' from anywhere." k
+echo "Installation complete! Run 'syswatch' from anywhere."
